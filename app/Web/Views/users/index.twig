@@ -16,6 +16,8 @@
                     <th>Nom d'utilisateur</th>
                     <th>Email</th>
                     <th>Créé le</th>
+                    <th>supprimer</th>
+                    <th>Métier</th>
                     <th>Mis à jour le</th>
                 </tr>
             </thead>
@@ -25,6 +27,16 @@
                         <td>{{ user.id }}</td>
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
+                        <td>{{ user.role ==="ouvrier" ? user.job : "-"}}</td>
+                        <td>
+                     <form action="{{ url('/deleteuser') }}"  method="">
+                  
+                    <input type="hidden" value="{{ user.id }}" name="id__user">  
+                        <button>Supprimer</button>
+                     </form>
+                     </td>
+
+
                         <td>{{ user.created_at }}</td>
                         <td>{{ user.updated_at }}</td>
                     </tr>

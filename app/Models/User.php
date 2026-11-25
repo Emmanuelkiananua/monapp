@@ -13,4 +13,53 @@ use Core\Model;
 final class User extends Model
 {
     protected static string $table = 'users';
+
+    public static function membersForTeam(int $teamId){
+      
+    return self::query(
+            '
+                SELECT users.id, users.username, users.email, users.role, users.job_id
+                FROM users
+                INNER JOIN userteam ON userteam.user_id = users.id
+                WHERE userteam.team_id = ?
+                ORDER BY users.username ASC
+            ',
+            [$teamId]
+       );
+    
+}
+
+public static function availableUsersForTeam(int $teamId){
+
+return self::query(
+            '
+                SELECT users.id, users.username, users.email
+                FROM users
+                WHERE users.id NOT IN (
+                    SELECT userteam.user_id
+                    FROM userteam
+                    WHERE userteam.team_id = ?
+                )
+                ORDER BY users.username ASC
+            ', [$teamId]
+);
+
+}
+
+        public static function getUserAndJob(){
+
+              return self::query("SELECT
+               u.id,
+               u.username,
+               u.email,
+               u.created_at,
+               u.role,
+               j.job ,
+               u.updated_at
+               FROM users u
+               LEFT JOIN jobs j ON j.id = u.job_id
+               ORDER BY u.created_at DESC;");
+       
+    
+}
 }
